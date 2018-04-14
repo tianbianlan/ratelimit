@@ -105,7 +105,7 @@ func NewBucketWithRateAndClock(rate float64, capacity int64, clock Clock) *Bucke
 	// Use the same bucket each time through the loop
 	// to save allocations.
 	tb := NewBucketWithQuantumAndClock(1, capacity, 1, clock)
-	for quantum := int64(1); quantum < 1<<50; quantum = nextQuantum(quantum) {
+	for quantum := int64(1); quantum < 1<<50; quantum = nextQuantum(quantum) {//根据速率和容量计算fillInterval和quantum
 		fillInterval := time.Duration(1e9 * float64(quantum) / rate)
 		if fillInterval <= 0 {
 			continue
@@ -122,7 +122,7 @@ func NewBucketWithRateAndClock(rate float64, capacity int64, clock Clock) *Bucke
 // nextQuantum returns the next quantum to try after q.
 // We grow the quantum exponentially, but slowly, so we
 // get a good fit in the lower numbers.
-func nextQuantum(q int64) int64 {
+func nextQuantum(q int64) int64 {        //已小步伐获取合适的Quantum，每次增加0.1倍
 	q1 := q * 11 / 10
 	if q1 == q {
 		q1++
